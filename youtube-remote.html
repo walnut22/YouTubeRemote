@@ -137,8 +137,8 @@ function updateRotation() {
     bgImg.style.transform = "rotate(0deg) scale(1)";
   } else {
     // Landscape / sideways Edge
-    // Scale slightly to fill the wider rotated display
-    bgImg.style.transform = "rotate(90deg) scale(1.25)";
+    // Rotate 180 degrees so it displays correctly
+    bgImg.style.transform = "rotate(180deg) scale(1.25)";
   }
 }
 
