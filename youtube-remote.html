@@ -3,18 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>Xeneon Edge YouTube Remote</title>
-
 <style>
 html, body {
   margin: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: black;
   font-family: Arial, sans-serif;
+  background: black;
 }
 
-/* Background image (iCUE-safe) */
+/* Background div for rotated wallpaper */
 #bg {
   position: absolute;
   width: 100%;
@@ -22,16 +21,16 @@ html, body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  transform: rotate(90deg); /* change to -90deg if needed */
   transform-origin: center;
-  z-index: 0;
+  z-index: -1;
+  transition: transform 0.3s ease; /* smooth rotation when screen rotates */
 }
 
 /* Wallpaper arrows */
 .arrow {
   position: absolute;
   top: 12px;
-  font-size: 26px;
+  font-size: 28px;
   padding: 8px 14px;
   background: rgba(0,0,0,0.6);
   color: white;
@@ -75,11 +74,14 @@ button:hover {
 
 <body>
 
+<!-- Background -->
 <div id="bg"></div>
 
+<!-- Wallpaper arrows -->
 <div id="prev" class="arrow" onclick="prevWallpaper()">◀</div>
 <div id="next" class="arrow" onclick="nextWallpaper()">▶</div>
 
+<!-- Media controls -->
 <div id="controls">
   <button onclick="send('play')">▶</button>
   <button onclick="send('pause')">⏸</button>
@@ -89,6 +91,7 @@ button:hover {
 </div>
 
 <script>
+// === Wallpapers ===
 const wallpapers = [
   "https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper1.jpg",
   "https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper2.jpg",
@@ -103,12 +106,14 @@ const wallpapers = [
 ];
 
 let index = 0;
+const bg = document.getElementById("bg");
 
+// Apply wallpaper
 function applyWallpaper() {
-  document.getElementById("bg").style.backgroundImage =
-    `url('${wallpapers[index]}')`;
+  bg.style.backgroundImage = `url('${wallpapers[index]}')`;
 }
 
+// Arrows
 function nextWallpaper() {
   index = (index + 1) % wallpapers.length;
   applyWallpaper();
@@ -119,9 +124,27 @@ function prevWallpaper() {
   applyWallpaper();
 }
 
+// Initial wallpaper
 applyWallpaper();
 
-/* Media command sender */
+// === Auto-rotate wallpaper based on screen orientation ===
+function updateRotation() {
+  if (window.innerWidth < window.innerHeight) {
+    // Portrait
+    bg.style.transform = "rotate(0deg)";
+  } else {
+    // Landscape (sideways Edge)
+    bg.style.transform = "rotate(90deg)";
+  }
+}
+
+// Call on load
+updateRotation();
+
+// Update on resize (Edge rotated / profile changes)
+window.addEventListener("resize", updateRotation);
+
+// === YouTube commands ===
 function send(cmd) {
   window.postMessage(cmd, "*");
 }
