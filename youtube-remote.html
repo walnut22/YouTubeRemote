@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Xeneon YouTube Remote</title>
+<style>
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: url('wallpaper.jpg') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+}
+#controls {
+  display: flex;
+  gap: 15px;
+  background: rgba(0,0,0,0.5);
+  padding: 20px;
+  border-radius: 15px;
+}
+button {
+  padding: 15px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #ff9900;
+  color: white;
+}
+button:hover { background-color: #ff7700; }
+</style>
+</head>
+<body>
+
+<div id="controls">
+  <button onclick="sendCommand('play')">▶ Play</button>
+  <button onclick="sendCommand('pause')">⏸ Pause</button>
+  <button onclick="sendCommand('rewind')">⏪ -10s</button>
+  <button onclick="sendCommand('forward')">⏩ +10s</button>
+  <button onclick="sendCommand('next')">⏭ Next Video</button>
+</div>
+
+<script>
+function sendCommand(cmd) {
+    // Sends command to all open windows (YouTube tab must have Tampermonkey script running)
+    window.opener?.postMessage(cmd, "*");
+    window.parent?.postMessage(cmd, "*");
+    window.top?.postMessage(cmd, "*");
+}
+</script>
+
+</body>
+</html>
