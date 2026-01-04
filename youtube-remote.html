@@ -2,41 +2,78 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Xeneon YouTube Remote</title>
+<title>Xeneon Edge Remote + AI</title>
 <style>
 html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  background: black;
 }
+
+/* Media controls at bottom */
 #controls {
   display: flex;
   gap: 15px;
   background: rgba(0,0,0,0.6);
-  padding: 20px;
-  border-radius: 15px;
+  padding: 15px 25px;
+  border-radius: 12px;
   z-index: 10;
   position: relative;
 }
+
+/* Buttons style */
 button {
-  padding: 15px 25px;
-  font-size: 18px;
+  padding: 12px 20px;
+  font-size: 16px;
   font-weight: bold;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   background-color: #ff9900;
   color: white;
 }
 button:hover { background-color: #ff7700; }
+
+/* Copilot AI panel */
+#copilot {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 300px;
+  max-height: 70%;
+  background: rgba(0,0,0,0.6);
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  color: white;
+}
+#copilot textarea {
+  width: 100%;
+  height: 60px;
+  resize: none;
+  border-radius: 6px;
+  border: none;
+  padding: 8px;
+  font-size: 14px;
+}
+#copilot #response {
+  white-space: pre-wrap;
+  font-size: 14px;
+}
 </style>
 </head>
 <body>
 
+<!-- YouTube media controls -->
 <div id="controls">
   <button onclick="sendCommand('play')">▶ Play</button>
   <button onclick="sendCommand('pause')">⏸ Pause</button>
@@ -45,8 +82,15 @@ button:hover { background-color: #ff7700; }
   <button onclick="sendCommand('next')">⏭ Next Video</button>
 </div>
 
+<!-- Copilot AI Panel -->
+<div id="copilot">
+  <textarea id="input" placeholder="Ask Copilot..."></textarea>
+  <button onclick="askAI()">Send</button>
+  <div id="response"></div>
+</div>
+
 <script>
-// List of 10 wallpapers (replace filenames with your actual uploaded images)
+// ===== Wallpaper rotation =====
 const wallpapers = [
   'wallpaper1.jpg',
   'wallpaper2.jpg',
@@ -61,24 +105,42 @@ const wallpapers = [
 ];
 
 let current = 0;
-
-// Function to change wallpaper
 function changeWallpaper() {
   document.body.style.background = `url('${wallpapers[current]}') no-repeat center center`;
   document.body.style.backgroundSize = 'cover';
   current = (current + 1) % wallpapers.length;
 }
+changeWallpaper();  // initial
+setInterval(changeWallpaper, 300000); // every 5 minutes
 
-// Initial wallpaper
-changeWallpaper();
-
-// Rotate wallpaper every 5 minutes (300000ms)
-setInterval(changeWallpaper, 300000);
-
-// Function to send YouTube commands
+// ===== YouTube controls =====
 function sendCommand(cmd) {
-    // Sends command to YouTube tab with Tampermonkey script
+    // Works with Tampermonkey script in YouTube tab
     window.postMessage(cmd, "*");
+}
+
+// ===== Copilot AI function =====
+async function askAI() {
+    const input = document.getElementById('input').value;
+    if(!input) return;
+    const responseDiv = document.getElementById('response');
+
+    // Clear previous
+    responseDiv.innerText = 'Thinking...';
+
+    try {
+        // Send prompt to your server/proxy that calls OpenAI API
+        const res = await fetch('https://your-server.com/openai-proxy', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({prompt: input})
+        });
+        const data = await res.json();
+        responseDiv.innerText = data.answer || 'No response';
+    } catch(err) {
+        responseDiv.innerText = 'Error connecting to AI';
+        console.error(err);
+    }
 }
 </script>
 
