@@ -2,32 +2,65 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Xeneon YouTube Remote</title>
+<title>Xeneon Edge YouTube Remote</title>
+
 <style>
 html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  background: url('wallpaper.jpg') no-repeat center center;
-  background-size: cover;
+  font-family: sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
-  font-family: sans-serif;
+  background: black;
 }
+
+/* Top arrows */
+#top-arrows {
+  position: absolute;
+  top: 15px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.arrow {
+  pointer-events: auto;
+  font-size: 34px;
+  background: rgba(0,0,0,0.55);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.arrow:hover {
+  background: rgba(0,0,0,0.8);
+}
+
+/* Media controls */
 #controls {
   display: flex;
   gap: 15px;
-  background: rgba(0,0,0,0.5);
-  padding: 20px;
-  border-radius: 15px;
-}
-button {
+  background: rgba(0,0,0,0.6);
   padding: 15px 25px;
-  font-size: 18px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  z-index: 10;
+}
+
+button {
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   background-color: #ff9900;
   color: white;
@@ -35,22 +68,62 @@ button {
 button:hover { background-color: #ff7700; }
 </style>
 </head>
+
 <body>
 
+<!-- Top arrows -->
+<div id="top-arrows">
+  <div class="arrow" onclick="prevWallpaper()">⟵</div>
+  <div class="arrow" onclick="nextWallpaper()">⟶</div>
+</div>
+
+<!-- YouTube media controls -->
 <div id="controls">
-  <button onclick="sendCommand('play')">▶ Play</button>
-  <button onclick="sendCommand('pause')">⏸ Pause</button>
-  <button onclick="sendCommand('rewind')">⏪ -10s</button>
-  <button onclick="sendCommand('forward')">⏩ +10s</button>
-  <button onclick="sendCommand('next')">⏭ Next Video</button>
+  <button onclick="sendCommand('play')">▶</button>
+  <button onclick="sendCommand('pause')">⏸</button>
+  <button onclick="sendCommand('rewind')">⏪</button>
+  <button onclick="sendCommand('forward')">⏩</button>
+  <button onclick="sendCommand('next')">⏭</button>
 </div>
 
 <script>
+const wallpapers = [
+  'https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper1.jpg',
+  'https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper2.jpg',
+  'https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper3.jpg',
+  'https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper4.jpg',
+  'https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper5.jpg',
+  'https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper6.jpg',
+  'https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper7.jpg',
+  'https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper8.jpg',
+  'https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper9.jpg',
+  'https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper10.jpg'
+];
+
+let current = 0;
+
+function applyWallpaper() {
+  document.body.style.background =
+    `url('${wallpapers[current]}') no-repeat center center fixed`;
+  document.body.style.backgroundSize = 'cover';
+}
+
+function nextWallpaper() {
+  current = (current + 1) % wallpapers.length;
+  applyWallpaper();
+}
+
+function prevWallpaper() {
+  current = (current - 1 + wallpapers.length) % wallpapers.length;
+  applyWallpaper();
+}
+
+/* iCUE-safe delayed load */
+setTimeout(applyWallpaper, 600);
+
+/* YouTube controls */
 function sendCommand(cmd) {
-    // Sends command to all open windows (YouTube tab must have Tampermonkey script running)
-    window.opener?.postMessage(cmd, "*");
-    window.parent?.postMessage(cmd, "*");
-    window.top?.postMessage(cmd, "*");
+  window.postMessage(cmd, "*");
 }
 </script>
 
