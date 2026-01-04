@@ -16,18 +16,16 @@ html, body {
   align-items: center;
 }
 
-/* Wallpaper image */
 #bg-img {
   position: absolute;
   width: 100%;
   height: 100%;
-  object-fit: contain; /* keep full image visible */
+  object-fit: contain;
   transform-origin: center;
   transition: transform 0.3s ease;
   z-index: 0;
 }
 
-/* Arrows */
 .arrow {
   position: absolute;
   top: 12px;
@@ -43,7 +41,6 @@ html, body {
 #prev { left: 12px; }
 #next { right: 12px; }
 
-/* Media controls */
 #controls {
   position: absolute;
   bottom: 18px;
@@ -67,21 +64,16 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  background: #ff7700;
-}
+button:hover { background: #ff7700; }
 </style>
 </head>
 <body>
 
-<!-- Wallpaper -->
 <img id="bg-img" src="" alt="Wallpaper">
 
-<!-- Arrows -->
 <div id="prev" class="arrow" onclick="prevWallpaper()">◀</div>
 <div id="next" class="arrow" onclick="nextWallpaper()">▶</div>
 
-<!-- Media controls -->
 <div id="controls">
   <button onclick="send('play')">▶ Play</button>
   <button onclick="send('pause')">⏸ Pause</button>
@@ -91,7 +83,7 @@ button:hover {
 </div>
 
 <script>
-// === Wallpapers ===
+// Pre-flipped wallpapers uploaded to GitHub
 const wallpapers = [
   "https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper1.jpg",
   "https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper2.jpg",
@@ -108,45 +100,25 @@ const wallpapers = [
 let index = 0;
 const bgImg = document.getElementById("bg-img");
 
-// Apply wallpaper
+// Apply current wallpaper
 function applyWallpaper() {
   bgImg.src = wallpapers[index];
 }
 
-// Manual arrows
+// Arrow controls
 function nextWallpaper() {
   index = (index + 1) % wallpapers.length;
   applyWallpaper();
 }
-
 function prevWallpaper() {
   index = (index - 1 + wallpapers.length) % wallpapers.length;
   applyWallpaper();
 }
 
-// Initialize wallpaper
+// Initialize
 applyWallpaper();
 
-// Rotate wallpaper based on screen orientation
-function updateRotation() {
-  const w = window.innerWidth;
-  const h = window.innerHeight;
-
-  if (w < h) {
-    // Portrait
-    bgImg.style.transform = "rotate(0deg) scale(1)";
-  } else {
-    // Landscape / sideways Edge
-    bgImg.style.transform = "rotate(-90deg) scale(1.25)";
-  }
-}
-
-// Call on load
-updateRotation();
-window.addEventListener("resize", updateRotation);
-
-// === Media control ===
-// Note: You need a YouTube tab with a userscript listening for messages (Tampermonkey or similar)
+// Media control
 function send(cmd) {
   window.postMessage(cmd, "*");
 }
