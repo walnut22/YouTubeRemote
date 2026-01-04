@@ -8,11 +8,9 @@ html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  /* GitHub Pages relative path */
   background: url('wallpaper.jpg') no-repeat center center;
   background-size: cover;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   font-family: sans-serif;
@@ -27,12 +25,12 @@ html, body {
 button {
   padding: 15px 25px;
   font-size: 18px;
+  font-weight: bold;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   background-color: #ff9900;
   color: white;
-  font-weight: bold;
 }
 button:hover { background-color: #ff7700; }
 </style>
@@ -48,12 +46,9 @@ button:hover { background-color: #ff7700; }
 </div>
 
 <script>
-// Send commands to Tampermonkey script
 function sendCommand(cmd) {
-    // Open a small window to post message to all tabs
-    // This only works if Tampermonkey script is active in YouTube
+    // Send command to all listening tabs (Tampermonkey script)
     window.postMessage(cmd, "*");
-    alert("Command sent: " + cmd); // For testing, remove later
 }
 </script>
 
