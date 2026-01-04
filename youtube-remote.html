@@ -8,8 +8,6 @@ html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  background: url('wallpaper.jpg') no-repeat center center;
-  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,6 +19,8 @@ html, body {
   background: rgba(0,0,0,0.6);
   padding: 20px;
   border-radius: 15px;
+  z-index: 10;
+  position: relative;
 }
 button {
   padding: 15px 25px;
@@ -46,8 +46,38 @@ button:hover { background-color: #ff7700; }
 </div>
 
 <script>
+// List of 10 wallpapers (replace filenames with your actual uploaded images)
+const wallpapers = [
+  'wallpaper1.jpg',
+  'wallpaper2.jpg',
+  'wallpaper3.jpg',
+  'wallpaper4.jpg',
+  'wallpaper5.jpg',
+  'wallpaper6.jpg',
+  'wallpaper7.jpg',
+  'wallpaper8.jpg',
+  'wallpaper9.jpg',
+  'wallpaper10.jpg'
+];
+
+let current = 0;
+
+// Function to change wallpaper
+function changeWallpaper() {
+  document.body.style.background = `url('${wallpapers[current]}') no-repeat center center`;
+  document.body.style.backgroundSize = 'cover';
+  current = (current + 1) % wallpapers.length;
+}
+
+// Initial wallpaper
+changeWallpaper();
+
+// Rotate wallpaper every 5 minutes (300000ms)
+setInterval(changeWallpaper, 300000);
+
+// Function to send YouTube commands
 function sendCommand(cmd) {
-    // Send command to all listening tabs (Tampermonkey script)
+    // Sends command to YouTube tab with Tampermonkey script
     window.postMessage(cmd, "*");
 }
 </script>
