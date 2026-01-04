@@ -136,11 +136,11 @@ function updateRotation() {
     // Portrait
     bgImg.style.transform = "rotate(0deg) scale(1)";
   } else {
-    // Landscape / sideways Edge
-    // Rotate 180 degrees so it displays correctly
-    bgImg.style.transform = "rotate(180deg) scale(1.25)";
+    // Landscape / sideways Edge — flip vertically
+    bgImg.style.transform = "rotate(0deg) scale(1.25) scaleY(-1)";
   }
 }
+
 
 // Call on load
 updateRotation();
