@@ -2,38 +2,32 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Xeneon Edge YouTube Remote</title>
+<title>Xeneon YouTube Remote</title>
 <style>
 html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  font-family: sans-serif;
+  background: url('wallpaper.jpg') no-repeat center center;
+  background-size: cover;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  background: black;
+  font-family: sans-serif;
 }
-
-/* Media controls at bottom */
 #controls {
   display: flex;
   gap: 15px;
-  background: rgba(0,0,0,0.6);
-  padding: 15px 25px;
-  border-radius: 12px;
-  z-index: 10;
-  position: relative;
+  background: rgba(0,0,0,0.5);
+  padding: 20px;
+  border-radius: 15px;
 }
-
-/* Buttons style */
 button {
-  padding: 12px 20px;
-  font-size: 16px;
-  font-weight: bold;
+  padding: 15px 25px;
+  font-size: 18px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   background-color: #ff9900;
   color: white;
@@ -43,7 +37,6 @@ button:hover { background-color: #ff7700; }
 </head>
 <body>
 
-<!-- YouTube media controls -->
 <div id="controls">
   <button onclick="sendCommand('play')">▶ Play</button>
   <button onclick="sendCommand('pause')">⏸ Pause</button>
@@ -53,20 +46,13 @@ button:hover { background-color: #ff7700; }
 </div>
 
 <script>
-// ===== Wallpaper rotation =====
-const wallpapers = [
-  'wallpaper1.jpg',
-  'wallpaper2.jpg',
-  'wallpaper3.jpg',
-  'wallpaper4.jpg',
-  'wallpaper5.jpg',
-  'wallpaper6.jpg',
-  'wallpaper7.jpg',
-  'wallpaper8.jpg',
-  'wallpaper9.jpg',
-  'wallpaper10.jpg'
-];
+function sendCommand(cmd) {
+    // Sends command to all open windows (YouTube tab must have Tampermonkey script running)
+    window.opener?.postMessage(cmd, "*");
+    window.parent?.postMessage(cmd, "*");
+    window.top?.postMessage(cmd, "*");
+}
+</script>
 
-let current = 0;
-function changeWallpaper() {
-  document.body.st
+</body>
+</html>
