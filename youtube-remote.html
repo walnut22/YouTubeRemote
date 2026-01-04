@@ -50,8 +50,8 @@ html, body {
 <div id="next" class="arrow" onclick="nextWallpaper()">▶</div>
 
 <script>
-// Pre-rotated wallpapers uploaded to GitHub
-const wallpapers = [
+// List of pre-rotated wallpapers on GitHub
+const wallpaperBaseUrls = [
   "https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper1.jpg",
   "https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper2.jpg",
   "https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper3.jpg",
@@ -67,18 +67,23 @@ const wallpapers = [
 let index = 0;
 const bgImg = document.getElementById("bg-img");
 
+// Append a timestamp to prevent caching
+function cacheBustedUrl(url) {
+  return url + "?t=" + Date.now();
+}
+
 // Apply current wallpaper
 function applyWallpaper() {
-  bgImg.src = wallpapers[index];
+  bgImg.src = cacheBustedUrl(wallpaperBaseUrls[index]);
 }
 
 // Arrow controls
 function nextWallpaper() {
-  index = (index + 1) % wallpapers.length;
+  index = (index + 1) % wallpaperBaseUrls.length;
   applyWallpaper();
 }
 function prevWallpaper() {
-  index = (index - 1 + wallpapers.length) % wallpapers.length;
+  index = (index - 1 + wallpaperBaseUrls.length) % wallpaperBaseUrls.length;
   applyWallpaper();
 }
 
