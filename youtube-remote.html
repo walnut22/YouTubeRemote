@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Xeneon Edge YouTube Remote</title>
+<title>Xeneon Edge Wallpaper Widget</title>
 <style>
 html, body {
   margin: 0;
@@ -40,31 +40,6 @@ html, body {
 
 #prev { left: 12px; }
 #next { right: 12px; }
-
-#controls {
-  position: absolute;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-  padding: 12px 16px;
-  background: rgba(0,0,0,0.6);
-  border-radius: 14px;
-  z-index: 2;
-}
-
-button {
-  font-size: 17px;
-  padding: 9px 14px;
-  border: none;
-  border-radius: 9px;
-  background: #ff9900;
-  color: white;
-  cursor: pointer;
-}
-
-button:hover { background: #ff7700; }
 </style>
 </head>
 <body>
@@ -74,16 +49,8 @@ button:hover { background: #ff7700; }
 <div id="prev" class="arrow" onclick="prevWallpaper()">◀</div>
 <div id="next" class="arrow" onclick="nextWallpaper()">▶</div>
 
-<div id="controls">
-  <button onclick="send('play')">▶ Play</button>
-  <button onclick="send('pause')">⏸ Pause</button>
-  <button onclick="send('rewind')">⏪ -10s</button>
-  <button onclick="send('forward')">⏩ +10s</button>
-  <button onclick="send('next')">⏭ Next</button>
-</div>
-
 <script>
-// Pre-rotated wallpapers uploaded to GitHub (90° clockwise)
+// Pre-rotated wallpapers uploaded to GitHub
 const wallpapers = [
   "https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper1.jpg",
   "https://raw.githubusercontent.com/walnut22/YouTubeRemote/refs/heads/main/wallpaper2.jpg",
@@ -117,11 +84,6 @@ function prevWallpaper() {
 
 // Initialize
 applyWallpaper();
-
-// Media control
-function send(cmd) {
-  window.postMessage(cmd, "*");
-}
 </script>
 
 </body>
